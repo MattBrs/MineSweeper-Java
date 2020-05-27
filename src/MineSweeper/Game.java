@@ -8,9 +8,9 @@ import java.awt.event.ActionListener;
 import java.util.Random;
 
 public class Game implements ActionListener {
-    private int _rows;
-    private int _columns;
-    private Box[][] _boxes;
+    private int _rows;                                           //COMMENTATO IN ITALIANO PER CAPIRE MEGLIO E PER CARENZA DI TEMPO
+    private int _columns;                                        //COMMENTATO IN ITALIANO PER CAPIRE MEGLIO E PER CARENZA DI TEMPO
+    private Box[][] _boxes;                                      //COMMENTATO IN ITALIANO PER CAPIRE MEGLIO E PER CARENZA DI TEMPO
     private JButton[][] _buttons;
     private JLabel _pointsLabel;
     private int _maxBombs;                                  //variabili utilizzate e oggetti della gui di java
@@ -36,7 +36,7 @@ public class Game implements ActionListener {
         _points = 0;
         _pointsLabel.setText("Points: " + _points);
 
-        pointsPanel.add(_pointsLabel);          //creazione gio java
+        pointsPanel.add(_pointsLabel);          //creazione gui java
 
         for (int i = 0; i <_rows; i++){
             for (int j = 0; j < _columns; j++){
@@ -67,17 +67,17 @@ public class Game implements ActionListener {
                                 _pointsLabel.setText("Points: " + _points);                         //cambia il testo della label per mostrare il punteggio
                                 if (CountBoxes() == (_rows * _columns) - _maxBombs) {               //con il metodo count boxes conto le caselle che sono state scoperte. se sono pari al numero di caselle - n bombe scatta la vincita e si chiude la partita
                                     JOptionPane.showMessageDialog(null, "You Won! Score: " + _points);
-                                    new MainMenu();
-                                    frame.dispose();
+                                    new MainMenu();                                                 //apre la finestra main menu
+                                    frame.dispose();                                                //chiude quella corrente
                                 }
                             }
                         }
-                        else{
-                            _buttons[x][y].setIcon(bombIcon);
-                            UncoverAll();
-                            JOptionPane.showMessageDialog(null, "You lost! Score: " + _points);
-                            new MainMenu();
-                            frame.dispose();
+                        else{                                                                       //qua ci entra se la casella e' di tipo bomba
+                            _buttons[x][y].setIcon(bombIcon);                                       //setta l'icona come bomba
+                            UncoverAll();                                                           //richiama il metodo per scoprire tutte le caselle
+                            JOptionPane.showMessageDialog(null, "You lost! Score: " + _points);   //viene fuori il messaggio che hai perso
+                            new MainMenu();     //apre la finestra main menu
+                            frame.dispose();    //chiude quella corrente
                         }
                     }
                 });
@@ -91,13 +91,13 @@ public class Game implements ActionListener {
         panel.setBorder(BorderFactory.createEmptyBorder(30,30,10,30));          //creazione gui di java
         panel.setLayout(new GridLayout(_rows,_columns));
 
-        frame.add(panel, BorderLayout.CENTER);
-        frame.add(pointsPanel, BorderLayout.NORTH);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        //creazione gui di java
-        frame.setTitle("Mine Sweeper");
-        frame.setSize(_rows * 100 , _columns * 100);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+        frame.add(panel, BorderLayout.CENTER);                          //aggiunge il pannello con bottoni, ecc al frame principale ,ecc
+        frame.add(pointsPanel, BorderLayout.NORTH);                     //creazione gui di java
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);           //creazione gui di java
+        frame.setTitle("Mine Sweeper");                                 //creazione gui di java
+        frame.setSize(_rows * 100 , _columns * 100);        //creazione gui di java
+        frame.setLocationRelativeTo(null);                              //creazione gui di java
+        frame.setVisible(true);                                         //creazione gui di java
     }
 
     public static void main(String[] args) {
@@ -107,7 +107,7 @@ public class Game implements ActionListener {
     public int CountBoxes(){
         int count = 0;
         for (int i = 0; i < _rows; i++){
-            for(int j = 0; j < _columns; j++){
+            for(int j = 0; j < _columns; j++){                  //conta le caselle che sono scoperte per verificare la vincita
                 if(!_boxes[i][j].is_covered())
                     count++;
             }
@@ -166,7 +166,7 @@ public class Game implements ActionListener {
             if ( (j - 1 > 0) && (_boxes[i][j-1].is_covered()))     //left
                 UncoverSafe(i, j - 1);
 
-            if ((i + 1 < _rows) && (_boxes[i+1][j].is_covered()))    //down
+            if ((i + 1 < _rows) && (_boxes[i+1][j].is_covered()))    //down                questi controlliservono per vedere se la casella a fienco e' scoperta e se gli indici escono dalla matrice
                 UncoverSafe(i+1, j );
 
             if ((i - 1 > 0) && (_boxes[i-1][j].is_covered()))       //up
@@ -188,9 +188,9 @@ public class Game implements ActionListener {
 
     }
 
-    public void CalculateNearBombs(int i, int j){
+    public void CalculateNearBombs(int i, int j){                   //DA SISTEMARE => POCO OTTIMIZZATO
         int nearBombs = 0;
-        if ((i <= 0) || (j <= 0) || (i >= _rows - 1) || (j >= _columns - 1)) {;}
+        if ((i <= 0) || (j <= 0) || (i >= _rows - 1) || (j >= _columns - 1)) {;}                 //se gli indici escono dalla matrice non procedo
 
         else {
             if (!_boxes[i][j - 1].get_type())              //sinistra
@@ -199,7 +199,7 @@ public class Game implements ActionListener {
                 nearBombs++;
             if (!_boxes[i + 1][j].get_type())              //sotto
                 nearBombs++;
-            if (!_boxes[i - 1][j].get_type())            //sopra
+            if (!_boxes[i - 1][j].get_type())            //sopra                                altrimenti controllo se la casella a fianco e' una bomba
                 nearBombs++;
             if (!_boxes[i + 1][j - 1].get_type())            //sotto-sinistra
                 nearBombs++;
@@ -227,7 +227,7 @@ public class Game implements ActionListener {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e) {            //NON UTILE PER QUESTO PROGRAMMA MA OBBLIGATORIO PER IMPLEMENTAZIONE "ActionListener"
 
     }
 }
