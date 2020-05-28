@@ -148,14 +148,15 @@ public class Game implements ActionListener {
     {                                                                   //(possibilmente quest'estate
 
         CalculateNearBombs(i,j);
+
         if ((i < 0) || (j < 0) || (i > _rows - 1) || (j > _columns - 1))  {;}          //controlla se gli indici escono dalla matrice
 
         else if (!_boxes[i][j].get_type() )     {;}                                    //se e' una bomba skippa
 
 
-        else if(_boxes[i][j].get_nearBombs() > 0) {_points++;}
         else                                                                        //altrimenti continua e fa altri controlli
         {
+            _buttons[i][j].setText("" + _boxes[i][j].get_nearBombs());
             _points++;
             _buttons[i][j].setIcon(safeIcon);                                 //imposto l'icona a verda
             _boxes[i][j].Uncover();                                           //imposto la casella come scoperta per evitare casini negli if
@@ -190,27 +191,20 @@ public class Game implements ActionListener {
 
     public void CalculateNearBombs(int i, int j){                   //DA SISTEMARE => POCO OTTIMIZZATO
         int nearBombs = 0;
-        if ((i <= 0) || (j <= 0) || (i >= _rows - 1) || (j >= _columns - 1)) {;}                 //se gli indici escono dalla matrice non procedo
-
-        else {
-            if (!_boxes[i][j - 1].get_type())              //sinistra
-                nearBombs++;
-            if (!_boxes[i][j + 1].get_type())              //destra
-                nearBombs++;
-            if (!_boxes[i + 1][j].get_type())              //sotto
-                nearBombs++;
-            if (!_boxes[i - 1][j].get_type())            //sopra                                altrimenti controllo se la casella a fianco e' una bomba
-                nearBombs++;
-            if (!_boxes[i + 1][j - 1].get_type())            //sotto-sinistra
-                nearBombs++;
-            if (!_boxes[i - 1][j - 1].get_type())            //sopra-sinistra
-                nearBombs++;
-            if (!_boxes[i + 1][j + 1].get_type())            //sotto-destra
-                nearBombs++;
-            if (!_boxes[i - 1][j - 1].get_type())              //sopra-sinistra
-                nearBombs++;
+        int posx, posy;
+        for (int c = -1; c <= 1; c++){
+            for (int r = -1; r<=1; r++){
+                posx = i + c;
+                posy = j + r;
+                if(posx < _columns && (posy >= 0 && posy < _rows)){
+                    if(!_boxes[posx][posy].get_type()){
+                        nearBombs++;
+                    }
+                }
+            }
         }
-            _boxes[i][j].set_nearBombs(nearBombs);
+        
+        _boxes[i][j].set_nearBombs(nearBombs);
 
     }
 
